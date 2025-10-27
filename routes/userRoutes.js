@@ -1,5 +1,5 @@
 import express from 'express';
-import {deleteUser, getSingleUser, getUserDetails, getUsersList, loginUser, logout, registerUser, requestPasswordReset, resetPassword, updatePassword, updateProfile, updateUserRole} from '../controller/userController.js';
+import {checktoken, deleteUser, getSingleUser, getUserDetails, getUsersList, loginUser, logout, registerUser, requestPasswordReset, resetPassword, updatePassword, updateProfile, updateUserRole} from '../controller/userController.js';
 import { roleBasedAccess, verifyUserAuth } from '../middleware/userAuth.js';
 const router=express.Router();
 
@@ -13,7 +13,8 @@ router.route("/password/update").put(verifyUserAuth, updatePassword);
 router.route("/profile/update").put(verifyUserAuth, updateProfile);
 router.route("/admin/users").get(verifyUserAuth, roleBasedAccess('admin'), getUsersList);
 router.route("/admin/user/:id")
-.get(verifyUserAuth, roleBasedAccess('admin'), getSingleUser)
+router.get("/checktoken",verifyUserAuth,checktoken);
+router.get(verifyUserAuth, roleBasedAccess('admin'), getSingleUser)
 .put(verifyUserAuth, roleBasedAccess('admin'),updateUserRole)
 .delete(verifyUserAuth, roleBasedAccess('admin'),deleteUser)
 export default router;
